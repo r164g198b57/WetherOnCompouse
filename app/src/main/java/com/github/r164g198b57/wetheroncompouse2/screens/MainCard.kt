@@ -4,9 +4,11 @@ package com.github.r164g198b57.wetheroncompouse2.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -159,8 +161,14 @@ fun TabLayout() {
                 )
             }
         }
-        HorizontalPager(count = tablist.size, state = pagerState, modifier = Modifier.weight(1.0f)) {
-            index ->
+        HorizontalPager(count = tablist.size, state = pagerState, modifier = Modifier.weight(1.0f)) { index ->
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(10) {
+                    ListItem()
+                }
+            }
 
         }
     }
