@@ -1,26 +1,26 @@
 package com.github.r164g198b57.wetheroncompouse2.screens
 
-import androidx.compose.foundation.Image
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
+import androidx.compose.material.TabRowDefaults
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,27 +29,25 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.github.r164g198b57.wetheroncompouse2.R
 import com.github.r164g198b57.wetheroncompouse2.ui.theme.BlueLight
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.pagerTabIndicatorOffset
 
-@Preview(showBackground = true)
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
+
+
 @Composable
-fun MainScreen() {
-    Image(
-        painter = painterResource(id = R.drawable.background),
-        contentDescription = "background",
-        modifier = Modifier
-            .fillMaxSize()
-            .alpha(0.75f),
-        contentScale = ContentScale.Crop
-    )
+fun MainCard() {
+
     Column(
         modifier = Modifier
-            .fillMaxSize()
             .padding(7.dp)
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = BlueLight),
-            elevation = CardDefaults.cardElevation(2.dp),
+            backgroundColor = BlueLight,
+            elevation = 0.dp,
             shape = RoundedCornerShape(7.dp)
         ) {
             Column(
@@ -101,10 +99,10 @@ fun MainScreen() {
                             onClick = { /*TODO*/ })
                         {
                             Icon(
-                                painter = painterResource(id =  R.drawable.search),
-                                contentDescription ="search",
+                                painter = painterResource(id = R.drawable.search),
+                                contentDescription = "search",
                                 tint = Color.White
-                                )
+                            )
                         }
                         Text(
                             text = "+2 С°/+3 С°",
@@ -112,11 +110,11 @@ fun MainScreen() {
                             color = Color.White
                         )
                         IconButton(
-                                onClick = { /*TODO*/ })
+                            onClick = { /*TODO*/ })
                         {
                             Icon(
-                                painter = painterResource(id =  R.drawable.refresh),
-                                contentDescription ="search",
+                                painter = painterResource(id = R.drawable.refresh),
+                                contentDescription = "search",
                                 tint = Color.White
                             )
                         }
@@ -128,5 +126,42 @@ fun MainScreen() {
             }
         }
 
+    }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Preview(showBackground = true)
+@Composable
+fun TabLayout() {
+    val tablist = listOf("HOURS", "DAYS")
+    val pagerState = rememberPagerState()
+    val tabIndex = pagerState.currentPage
+    val coroutineScope = rememberCoroutineScope()
+
+    Column(modifier = Modifier
+        .padding(start = 7.dp, end = 7.dp)
+        .clip(
+            RoundedCornerShape(5.dp)
+        )) {
+        TabRow(
+            selectedTabIndex = tabIndex,
+            indicator = { pos->
+                        TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState,pos))
+            },
+            backgroundColor = BlueLight,
+            contentColor = Color.White
+        ) {
+            tablist.forEachIndexed { index, text ->
+                Tab(
+                    selected = false,
+                    onClick = { coroutineScope.launch {  pagerState.animateScrollToPage(index)}},
+                    text = { Text(text = text) }
+                )
+            }
+        }
+        HorizontalPager(count = tablist.size, state = pagerState, modifier = Modifier.weight(1.0f)) {
+            index ->
+
+        }
     }
 }
