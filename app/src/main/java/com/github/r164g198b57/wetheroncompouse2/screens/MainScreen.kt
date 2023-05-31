@@ -12,6 +12,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,13 +33,14 @@ import com.github.r164g198b57.wetheroncompouse2.ui.theme.BlueLight
 @Preview(showBackground = true)
 @Composable
 fun MainScreen() {
-    Image(painter = painterResource(id = R.drawable.background),
+    Image(
+        painter = painterResource(id = R.drawable.background),
         contentDescription = "background",
-        modifier= Modifier
+        modifier = Modifier
             .fillMaxSize()
             .alpha(0.75f),
         contentScale = ContentScale.Crop
-        )
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,25 +51,79 @@ fun MainScreen() {
             colors = CardDefaults.cardColors(containerColor = BlueLight),
             elevation = CardDefaults.cardElevation(2.dp),
             shape = RoundedCornerShape(7.dp)
-        ){
+        ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(
+                Column(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                 ) {
-                    Text(text = "1 may 1947",
-                        style = TextStyle(fontSize = 15.sp),
-                        color = Color.White
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "1 may 1947",
+                            style = TextStyle(fontSize = 15.sp),
+                            color = Color.White
                         )
-                    AsyncImage(model = "https://cdn.weatherapi.com/weather/64x64/day/113.png",
-                        contentDescription = "wether image",
-                        modifier = Modifier.size(35.dp).padding(8.dp)
+                        AsyncImage(
+                            model = "https://cdn.weatherapi.com/weather/64x64/day/113.png",
+                            contentDescription = "wether image",
+                            modifier = Modifier
+                                .size(35.dp)
+                                .padding(8.dp)
                         )
 
+                    }
+                    Text(
+                        text = "Berezovka",
+                        style = TextStyle(fontSize = 36.sp),
+                        color = Color.White
+                    )
+                    Text(
+                        text = "+2 С°",
+                        style = TextStyle(fontSize = 73.sp),
+                        color = Color.White
+                    )
+                    Text(
+                        text = "Overcast, intermittent rain",
+                        style = TextStyle(fontSize = 15.sp),
+                        color = Color.White
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        IconButton(
+                            onClick = { /*TODO*/ })
+                        {
+                            Icon(
+                                painter = painterResource(id =  R.drawable.search),
+                                contentDescription ="search",
+                                tint = Color.White
+                                )
+                        }
+                        Text(
+                            text = "+2 С°/+3 С°",
+                            style = TextStyle(fontSize = 15.sp),
+                            color = Color.White
+                        )
+                        IconButton(
+                                onClick = { /*TODO*/ })
+                        {
+                            Icon(
+                                painter = painterResource(id =  R.drawable.refresh),
+                                contentDescription ="search",
+                                tint = Color.White
+                            )
+                        }
+
+                    }
                 }
+
 
             }
         }
