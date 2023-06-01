@@ -187,7 +187,7 @@ fun TabLayout() {
                             "//cdn.weatherapi.com/weather/64x64/day/176.png",
                             "26 C",
                             "12 C",
-                            "jggigkiug"
+                            "jggiptnpnhgkiug"
                         ),
                     )
                 ) { index, item ->
