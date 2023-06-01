@@ -19,6 +19,7 @@ import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +27,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -36,7 +36,6 @@ import com.github.r164g198b57.wetheroncompouse2.ui.theme.BlueLight
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
-
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
@@ -78,7 +77,6 @@ fun MainCard() {
                                 .size(35.dp)
                                 .padding(8.dp)
                         )
-
                     }
                     Text(
                         text = "Berezovka",
@@ -122,35 +120,32 @@ fun MainCard() {
                                 tint = Color.White
                             )
                         }
-
                     }
                 }
-
-
             }
         }
-
     }
 }
 
 @OptIn(ExperimentalPagerApi::class)
-@Preview(showBackground = true)
 @Composable
-fun TabLayout() {
+fun TabLayout(daysList: MutableState<List<WeatherModel>>) {
     val tablist = listOf("HOURS", "DAYS")
     val pagerState = rememberPagerState()
     val tabIndex = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
 
-    Column(modifier = Modifier
-        .padding(start = 7.dp, end = 7.dp)
-        .clip(
-            RoundedCornerShape(5.dp)
-        )) {
+    Column(
+        modifier = Modifier
+            .padding(start = 7.dp, end = 7.dp)
+            .clip(
+                RoundedCornerShape(5.dp)
+            )
+    ) {
         TabRow(
             selectedTabIndex = tabIndex,
-            indicator = { pos->
-                        TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState,pos))
+            indicator = { pos ->
+                TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState, pos))
             },
             backgroundColor = BlueLight,
             contentColor = Color.White
@@ -158,45 +153,25 @@ fun TabLayout() {
             tablist.forEachIndexed { index, text ->
                 Tab(
                     selected = false,
-                    onClick = { coroutineScope.launch {  pagerState.animateScrollToPage(index)}},
+                    onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
                     text = { Text(text = text) }
                 )
             }
         }
-        HorizontalPager(count = tablist.size, state = pagerState, modifier = Modifier.weight(1.0f)) { index ->
+        HorizontalPager(
+            count = tablist.size,
+            state = pagerState,
+            modifier = Modifier.weight(1.0f)
+        ) { index ->
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
                 itemsIndexed(
-                    listOf(
-                        WeatherModel(
-                            "London",
-                            "10:57",
-                            "25 C",
-                            "Rainy day",
-                            "//cdn.weatherapi.com/weather/64x64/day/122.png",
-                            "",
-                            "",
-                            ""
-                        ),
-                        WeatherModel(
-                            "London",
-                            "01.06",
-                            "",
-                            "Sunny",
-                            "//cdn.weatherapi.com/weather/64x64/day/176.png",
-                            "26 C",
-                            "12 C",
-                            "jggiptnpnhgkiug"
-                        ),
-                    )
-                ) { index, item ->
+                    daysList.value
+                ) { _, item ->
                     ListItem(item)
                 }
-
-
             }
-
         }
     }
 }
