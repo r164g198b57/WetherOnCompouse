@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
                 )
                 Column {
                     MainCard(currentDay)
-                    TabLayout(daysList)
+                    TabLayout(daysList, currentDay)
                 }
 
             }
@@ -77,7 +77,7 @@ private fun getData(
     val url = "https://api.weatherapi.com/v1/forecast.json?key=$API_KEY" +
             "&q=$city" +
             "&days=" +
-            "3" +
+            "7" +
             "&aqi=no&alerts=no"
     val queue = Volley.newRequestQueue(context)
     val sRequest = StringRequest(
