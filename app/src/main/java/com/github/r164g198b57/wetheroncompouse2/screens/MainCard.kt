@@ -39,87 +39,96 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
-
 @Composable
-fun MainCard() {
-
+fun MainCard(currentDay: MutableState<WeatherModel>) {
     Column(
         modifier = Modifier
-            .padding(7.dp)
+            .padding(5.dp)
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             backgroundColor = BlueLight,
-            elevation = 0.dp,
-            shape = RoundedCornerShape(7.dp)
+            elevation = 0.dp
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Column(
+                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = "1 may 1947",
-                            style = TextStyle(fontSize = 15.sp),
-                            color = Color.White
-                        )
-                        AsyncImage(
-                            model = "https://cdn.weatherapi.com/weather/64x64/day/113.png",
-                            contentDescription = "wether image",
-                            modifier = Modifier
-                                .size(35.dp)
-                                .padding(8.dp)
-                        )
-                    }
                     Text(
-                        text = "Berezovka",
-                        style = TextStyle(fontSize = 36.sp),
-                        color = Color.White
-                    )
-                    Text(
-                        text = "+2 С°",
-                        style = TextStyle(fontSize = 73.sp),
-                        color = Color.White
-                    )
-                    Text(
-                        text = "Overcast, intermittent rain",
+                        text = currentDay.value.time,
+                        modifier = Modifier.padding(
+                            top = 8.dp,
+                            start = 8.dp
+                        ),
                         style = TextStyle(fontSize = 15.sp),
                         color = Color.White
                     )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                    AsyncImage(
+                        model = "https:" + currentDay.value.icon,
+                        contentDescription = "im2",
+                        modifier = Modifier
+                            .padding(
+                                top = 8.dp,
+                                end = 8.dp
+                            )
+                            .size(35.dp)
+                    )
+                }
+                Text(
+                    text = currentDay.value.city,
+                    style = TextStyle(fontSize = 24.sp),
+                    color = Color.White
+                )
+                Text(
+                    text = currentDay.value.currentTemp.toFloat().toInt().toString() + "ºC",
+                    style = TextStyle(fontSize = 65.sp),
+                    color = Color.White
+                )
+                Text(
+                    text = currentDay.value.condition,
+                    style = TextStyle(fontSize = 16.sp),
+                    color = Color.White
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    IconButton(
+                        onClick = {
+
+                        }
                     ) {
-                        IconButton(
-                            onClick = { /*TODO*/ })
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.search),
-                                contentDescription = "search",
-                                tint = Color.White
-                            )
-                        }
-                        Text(
-                            text = "+2 С°/+3 С°",
-                            style = TextStyle(fontSize = 15.sp),
-                            color = Color.White
+                        Icon(
+                            painter = painterResource(id = R.drawable.search),
+                            contentDescription = "im3",
+                            tint = Color.White
                         )
-                        IconButton(
-                            onClick = { /*TODO*/ })
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.refresh),
-                                contentDescription = "search",
-                                tint = Color.White
-                            )
+                    }
+                    Text(
+                        text = "${
+                            currentDay.value
+                                .maxTemp.toFloat().toInt()
+                        }ºC/${
+                            currentDay
+                                .value.minTemp.toFloat().toInt()
+                        }ºC",
+                        style = TextStyle(fontSize = 16.sp),
+                        color = Color.White
+                    )
+                    IconButton(
+                        onClick = {
+
                         }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.refresh),
+                            contentDescription = "im4",
+                            tint = Color.White
+                        )
                     }
                 }
             }
@@ -130,36 +139,45 @@ fun MainCard() {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun TabLayout(daysList: MutableState<List<WeatherModel>>) {
-    val tablist = listOf("HOURS", "DAYS")
+    val tabList = listOf("HOURS", "DAYS")
     val pagerState = rememberPagerState()
     val tabIndex = pagerState.currentPage
     val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
-            .padding(start = 7.dp, end = 7.dp)
-            .clip(
-                RoundedCornerShape(5.dp)
+            .padding(
+                start = 5.dp,
+                end = 5.dp
             )
+            .clip(RoundedCornerShape(5.dp))
     ) {
         TabRow(
             selectedTabIndex = tabIndex,
             indicator = { pos ->
-                TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState, pos))
+                TabRowDefaults.Indicator(
+                    Modifier.pagerTabIndicatorOffset(pagerState, pos)
+                )
             },
             backgroundColor = BlueLight,
             contentColor = Color.White
         ) {
-            tablist.forEachIndexed { index, text ->
+            tabList.forEachIndexed { index, text ->
                 Tab(
                     selected = false,
-                    onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
-                    text = { Text(text = text) }
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    },
+                    text = {
+                        Text(text = text)
+                    }
                 )
             }
         }
         HorizontalPager(
-            count = tablist.size,
+            count = tabList.size,
             state = pagerState,
             modifier = Modifier.weight(1.0f)
         ) { index ->
